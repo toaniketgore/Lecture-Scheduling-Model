@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Dashboard</title>
+    <link rel="stylesheet" href="instructordashboard.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>Lectures List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Sr. No</th>
+                    <th>Date</th>
+                    <th>Course</th>
+                    <th>Instructor</th>
+                    <th>Batches</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% assignedCourses.forEach((lecture, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= lecture.date %></td>
+                        <td><%= lecture.course %></td>
+                        <td><%= lecture.instructor %></td>
+                        <td><%= lecture.batches %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        <form action="/logout" method="get">
+            <button type="submit">Sign Out</button>
+        </form>
+    </div>
+</body>
+
+</html>

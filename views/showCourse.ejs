@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Course</title>
+    <link rel="stylesheet" href="showCourse.css">
+    <style>
+        .selected {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>All Courses</h2>
+        <table id="courseTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Level</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iterate over course data from the backend -->
+                <% courses.forEach(course=> { %>
+                    <tr data-id="<%= course._id %>">
+                        <td>
+                            <%= course.name %>
+                        </td>
+                        <td>
+                            <%= course.level %>
+                        </td>
+                        <td>
+                            <%= course.description %>
+                        </td>
+                        <td><img src="<%= course.image %>" alt="<%= course.name %>"></td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container">
+        <h2>Assign Course</h2>
+        <form id="assignCourseForm" action="/assignCourse" method="POST">
+            <div class="form-group">
+                <label for="selectedCourse">Selected Course:</label>
+                <span id="selectedCourseName">None</span>
+                <!-- Change the input name to 'courseName' instead of 'course' -->
+                <input type="hidden" id="selectedCourseInput" name="courseName">
+            </div>
+            <div class="form-group">
+                <label for="instructor">Select Instructor:</label>
+                <select id="instructor" name="instructor">
+                    <!-- Iterate over instructor options from backend -->
+                    <% instructors.forEach(instructor=> { %>
+                        <option value="<%= instructor.username %>">
+                            <%= instructor.username %>
+                        </option>
+                        <% }); %>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date">
+            </div>
+            <div class="form-group">
+                <label for="batch">Batch:</label>
+                <input type="text" id="batch" name="batch">
+            </div>
+            <button type="submit">Assign</button>
+        </form>
+    </div>
+    <div class="button-wrapper">
+        <button><a href="/admindashboard">Go To DashBoard</a></button>
+    </div>
+
+    <script>
+        // JavaScript code to handle course selection
+        const courseRows = document.querySelectorAll('#courseTable tbody tr');
+        courseRows.forEach(row => {
+            row.addEventListener('click', () => {
+                // Clear previous selection
+                const selectedRow = document.querySelector('.selected');
+                if (selectedRow) {
+                    selectedRow.classList.remove('selected');
+                }
+                // Highlight the selected row
+                row.classList.add('selected');
+                // Update selected course details in the form
+                const courseName = row.querySelector('td:first-child').textContent.trim();
+                document.getElementById('selectedCourseName').textContent = courseName;
+                document.getElementById('selectedCourseInput').value = courseName; // Set the value of hidden input field
+            });
+        });
+
+        // JavaScript code to handle form submission
+        document.getElementById('assignCourseForm').addEventListener('submit', function (event) {
+            const selectedCourseName = document.getElementById('selectedCourseInput').value;
+            console.log(selectedCourseName);
+            if (!selectedCourseName || selectedCourseName === 'None') {
+                alert('Please select a course.');
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+
+
+    </script>
+
+</body>
+
+</html>
